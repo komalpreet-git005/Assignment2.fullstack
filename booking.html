@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Form</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Book Your Trip</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="packages.html">Packages</a>
+    <a href="booking.html">Booking</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <section>
+    <h2>Fill in Your Details</h2>
+    <form>
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email" required>
+      <input type="date" placeholder="Start Date" required>
+      <input type="date" placeholder="End Date" required>
+      
+      <select required>
+        <option value="">Select Destination</option>
+        <option>Paris</option>
+        <option>Tokyo</option>
+        <option>Maldives</option>
+      </select>
+
+      <select required>
+        <option value="">Select Package</option>
+        <option>Budget</option>
+        <option>Standard</option>
+        <option>Luxury</option>
+      </select>
+
+      <textarea placeholder="Special Requests"></textarea>
+      <button type="submit">Book Now</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 Travel Agency</p>
+  </footer>
+</body>
+</html>
