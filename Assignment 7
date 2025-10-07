@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>To-Do List</title>
+  <style>
+    :root{font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+    body{max-width:900px;margin:36px auto;padding:18px;}
+    h1{text-align:center;margin-bottom:18px}
+    form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+    input[type="text"], textarea{flex:1;min-width:200px;padding:8px;border:1px solid #ccc;border-radius:6px}
+    textarea{resize:vertical}
+    button{padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
+    button#addTask{background:#0b79d0;color:white}
+    .task{border:1px solid #e0e0e0;padding:12px;border-radius:8px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+    .taskMain{flex:1}
+    .task h3{margin:0 0 6px 0}
+    .task p{margin:0;color:#333}
+    .controls{display:flex;flex-direction:column;gap:6px}
+    .controls button{padding:6px 8px;background:#f1f1f1}
+    .completed{text-decoration:line-through;opacity:0.75}
+
+    /* small responsive tweak */
+    @media (max-width:520px){.controls{flex-direction:row}}
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+
+  <form id="taskForm" onsubmit="return false;">
+    <input id="titleInput" type="text" placeholder="Task title" required />
+    <textarea id="descInput" rows="2" placeholder="Task description (optional)"></textarea>
+    <button id="addTask" type="button">Add Task</button>
+  </form>
+
+  <div id="taskList" aria-live="polite"></div>
+
+  <script>
+    const taskForm = document.getElementById('taskForm');
+    const titleInput = document.getElementById('titleInput');
+    const descInput = document.getElementById('descInput');
+    const taskList = document.getElementById('taskList');
+
+    // Helpers
+    function createButton(text, cls) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = text;
+      if (cls) btn.className = cls;
+      return btn;
+    }
+
+    function createTaskElement(title, desc, completed=false) {
+      const task = document.createElement('div');
+      task.className = 'task';
+
+      const main = document.createElement('div');
+      main.className = 'taskMain';
+
+      const h3 = document.createElement('h3');
+      h3.textContent = title;
+
+      const p = document.createElement('p');
+      p.textContent = desc;
+
+      if (completed) {
+        h3.classList.add('completed');
+        p.classList.add('completed');
+      }
+
+      main.appendChild(h3);
+      main.appendChild(p);
+
+      const controls = document.createElement('div');
+      controls.className = 'controls';
+
+      const toggleBtn = createButton(completed ? 'Mark as Incomplete' : 'Mark as Completed');
+      const editBtn = createButton('Edit');
+      const deleteBtn = createButton('Delete');
+
+      // Toggle completed
+      toggleBtn.addEventListener('click', () => {
+        const isCompleted = h3.classList.toggle('completed');
+        p.classList.toggle('completed');
+        toggleBtn.textContent = isCompleted ? 'Mark as Incomplete' : 'Mark as Completed';
+      });
+
+      // Delete
+      deleteBtn.addEventListener('click', () => {
+        task.remove();
+      });
+
+      // Edit / Save
+      editBtn.addEventListener('click', () => {
+        const inEditMode = editBtn.textContent === 'Save';
+        if (!inEditMode) {
+          // switch to edit mode: replace title/desc with inputs
+          const titleField = document.createElement('input');
+          titleField.type = 'text';
+          titleField.value = h3.textContent;
+          titleField.required = true;
+          titleField.style.width = '100%';
+
+          const descField = document.createElement('textarea');
+          descField.rows = 2;
+          descField.value = p.textContent;
+          descField.style.width = '100%';
+
+          main.replaceChild(titleField, h3);
+          main.replaceChild(descField, p);
+          editBtn.textContent = 'Save';
+          // focus title field for convenience
+          titleField.focus();
+        } else {
+          // save -- validate title
+          const newTitleField = main.querySelector('input[type="text"]');
+          const newDescField = main.querySelector('textarea');
+          if (!newTitleField.value.trim()) {
+            alert('Title cannot be empty');
+            newTitleField.focus();
+            return;
+          }
+          const newH3 = document.createElement('h3');
+          newH3.textContent = newTitleField.value.trim();
+          const newP = document.createElement('p');
+          newP.textContent = newDescField.value.trim();
+
+          // preserve completed status
+          if (task.querySelector('h3') && task.querySelector('h3').classList.contains('completed')) {
+            newH3.classList.add('completed');
+            newP.classList.add('completed');
+          }
+
+          main.replaceChild(newH3, newTitleField);
+          main.replaceChild(newP, newDescField);
+          editBtn.textContent = 'Edit';
+        }
+      });
+
+      controls.appendChild(toggleBtn);
+      controls.appendChild(editBtn);
+      controls.appendChild(deleteBtn);
+
+      task.appendChild(main);
+      task.appendChild(controls);
+
+      return task;
+    }
+
+    // Add Task button
+    document.getElementById('addTask').addEventListener('click', () => {
+      const title = titleInput.value.trim();
+      const desc = descInput.value.trim();
+      if (!title) { titleInput.focus(); return; }
+
+      const taskEl = createTaskElement(title, desc, false);
+      taskList.prepend(taskEl);
+
+      // reset form
+      titleInput.value = '';
+      descInput.value = '';
+      titleInput.focus();
+    });
+
+    // Allow Enter to add when focus in title field
+    titleInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('addTask').click();
+      }
+    });
+
+    // Example seed tasks (optional comment out if not wanted)
+    // taskList.appendChild(createTaskElement('Buy groceries','Milk, eggs, bread', false));
+  </script>
+</body>
+</html>
