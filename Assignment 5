@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Arithmetic Operations</h3>
+<script>
+let a = parseFloat(prompt("Enter first number:"));
+let b = parseFloat(prompt("Enter second number:"));
+document.write("Sum = " + (a + b) + "<br>");
+document.write("Difference = " + (a - b) + "<br>");
+document.write("Product = " + (a * b) + "<br>");
+document.write("Quotient = " + (a / b).toFixed(2));
+</script>
+</body>
+</html>
+// soln 2
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Array Operations</h3>
+<script>
+let arr = [12, 5, 9, 22, 1];
+let largest = Math.max(...arr);
+let smallest = Math.min(...arr);
+document.write("Array: " + arr + "<br>");
+document.write("Largest: " + largest + "<br>");
+document.write("Smallest: " + smallest + "<br>");
+document.write("Ascending: " + arr.slice().sort((a,b)=>a-b) + "<br>");
+document.write("Descending: " + arr.slice().sort((a,b)=>b-a));
+</script>
+</body>
+</html>
+//soln 3
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Form Validation</h3>
+<form onsubmit="return validateForm()">
+  Name: <input id="name"><br>
+  Email: <input id="email"><br>
+  Age: <input id="age" type="number"><br>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+function validateForm() {
+  let n = document.getElementById("name").value.trim();
+  let e = document.getElementById("email").value.trim();
+  let a = parseInt(document.getElementById("age").value);
+  let pattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  if (!n) { alert("Name cannot be empty"); return false; }
+  if (!pattern.test(e)) { alert("Invalid email"); return false; }
+  if (isNaN(a) || a < 18 || a > 100) { alert("Age must be between 18 and 100"); return false; }
+  alert("Form submitted successfully!");
+  return false;
+}
+</script>
+</body>
+</html>
+//soln 4
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Student Object</h3>
+<script>
+let student = { name: "Komal", age: 21, grade: "A" };
+student.class = "B.Tech CSE";
+student.grade = "A+";
+for (let key in student) {
+  document.write(key + ": " + student[key] + "<br>");
+}
+</script>
+</body>
+</html>
+//soln 5
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Array Methods</h3>
+<script>
+let numbers = [1,2,3,4,5,6,7,8,9];
+let even = numbers.filter(n => n % 2 === 0);
+let doubled = even.map(n => n * 2);
+let sum = doubled.reduce((a,b) => a + b, 0);
+document.write("Original: " + numbers + "<br>");
+document.write("Even: " + even + "<br>");
+document.write("Doubled: " + doubled + "<br>");
+document.write("Sum: " + sum);
+</script>
+</body>
+</html>
