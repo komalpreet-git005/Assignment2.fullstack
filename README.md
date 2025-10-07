@@ -1,2 +1,2 @@
-# Assignment2.fullstack
-This is my assignment 2.
+# All Assignments
+These are my all Assignments. 
